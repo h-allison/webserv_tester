@@ -26,7 +26,7 @@ def main():
 		return 0
 	error += parsing_tests.launcher()
 	if error == 0:
-		print("Congratulations! All tests passed.")
+		print("\nCongratulations! All tests passed.")
 	return 0
 
 if __name__=="__main__":

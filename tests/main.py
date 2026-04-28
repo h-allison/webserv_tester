@@ -1,6 +1,7 @@
 #! /usr/bin/python3
 import os
 import parsing_tests
+import get_tests
 
 # my files
 import defines
@@ -25,6 +26,7 @@ def main():
 	if file_exists() == False:
 		return 0
 	error += parsing_tests.launcher()
+	error += get_tests.launcher()
 	if error == 0:
 		print("\nCongratulations! All tests passed.")
 	return 0

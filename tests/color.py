@@ -27,7 +27,7 @@ def cprint(string, color):
 	print(actual_color.format(string))
 
 def title_print(string, color):
-	msg = ("---------------- " +
+	msg = ("\n---------------- " +
 			string +
 			" ---------------\n")
 	cprint(msg, color)

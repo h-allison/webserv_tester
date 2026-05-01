@@ -16,7 +16,7 @@ def print_logo():
 def file_exists():
 	if not os.path.isfile(defines.webserv):
 		color.cprint("No executable found at \"" + defines.webserv + "\"", "red")
-		color.cprint("Did you remember to run make?", "red")
+		color.cprint("Did you remember to build webserv?", "red")
 		return False
 	return True
 
@@ -29,7 +29,9 @@ def main():
 	error += get_tests.launcher()
 	if error == 0:
 		print("\nCongratulations! All tests passed.")
-	return 0
+	else:
+		sys.exit(1)
 
+# means only run main() if the scripted is executed directly as opposed to imported as a module
 if __name__=="__main__":
 	main()

@@ -3,6 +3,6 @@ server{
   root /home/hallison/webserv/unit_tests/test_sites/;
   autoindex off;
   location /example/ {
-  	allow GET
+  	allow GET;
   }
 }

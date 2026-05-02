@@ -28,7 +28,7 @@ def networking_test_bad_config(config_path):
 		[defines.webserv, config_path],
 		stdout=subprocess.DEVNULL,
 		stderr=subprocess.DEVNULL) #sends output to /dev/null to avoid clutter
-	time.sleep(0.1) # 100 milliseconds
+	time.sleep(0.2) # 100 milliseconds
 	is_finished = proc.poll()
 	ok = is_finished is not None
 	if not ok:

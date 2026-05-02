@@ -38,7 +38,7 @@ def start_server(config_path):
 		sys.exit(1)
 	return server_proc
 
-def get_test_1(server):
+def get_test_index(server):
 	global test_count
 	test_count += 1
 	request_msg = "GET /index.html HTTP/1.0\r\n\r\n"
@@ -61,17 +61,45 @@ def get_test_1(server):
 	#  the _ means 2nd value is ignored
 
 	ok = output.startswith("HTTP/1.0 200 OK")
-	color.print_test(f"Test {test_count}", f"GET /index.html",
+	msg_string = "\"" + request_msg.replace("\r\n", "\\r\\n") + "\""
+	color.print_test(f"Test {test_count}", msg_string,
 					"should return 200 OK", ok)
 	return 0 if ok else 1
 
+def get_test_root_without_autoindex(server):
+	global test_count
+	test_count += 1
+	request_msg = "GET / HTTP/1.0\r\n\r\n"
+	
+	printf_proc = subprocess.Popen(
+		["printf", request_msg],
+		stdout=subprocess.PIPE,
+		text=True)
+	
+	nc_proc = subprocess.Popen(
+		["nc", "localhost", defines.port],
+		stdin=printf_proc.stdout,
+		stdout=subprocess.PIPE,
+		stderr=subprocess.STDOUT,
+		text=True)
+	
+	printf_proc.stdout.close() # need to close this because netcat has it open
+	output, _ = nc_proc.communicate()
+	# communicate returns 2 values, but we've already merged stderr into stdout,
+	#  the _ means 2nd value is ignored
+
+	ok = output.startswith("HTTP/1.0 403 Forbidden")
+	msg_string = "\"" + request_msg.replace("\r\n", "\\r\\n") + "\""
+	color.print_test(f"Test {test_count}",
+					msg_string, "should return 403 Forbidden", ok)
+	return 0 if ok else 1
 
 def launcher():
     color.title_print("simple GET tests", "bold")
     server_proc = start_server(defines.configs + "simple_example_allows_get.conf")
     error = 0
-    error += get_test_1(server_proc)
-    #error += get_test_2(server_proc)
+    error += get_test_index(server_proc)
+    error += get_test_root_without_autoindex(server_proc)
     server_proc.kill()
     return error
 

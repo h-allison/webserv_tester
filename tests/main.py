@@ -1,11 +1,13 @@
 #! /usr/bin/python3
 import os
-import parsing_tests
-import get_tests
+import sys
 
 # my files
 import defines
 import color
+import parsing_tests
+import networking_init_tests
+import get_tests
 
 def print_logo():
 	file = open(".logo.txt")
@@ -16,7 +18,7 @@ def print_logo():
 def file_exists():
 	if not os.path.isfile(defines.webserv):
 		color.cprint("No executable found at \"" + defines.webserv + "\"", "red")
-		color.cprint("Did you remember to build webserv?", "red")
+		color.cprint("Did you forget to build webserv?", "red")
 		return False
 	return True
 
@@ -24,14 +26,15 @@ def main():
 	error = 0
 	print_logo()
 	if file_exists() == False:
-		return 0
+		sys.exit(1)
 	error += parsing_tests.launcher()
+	error += networking_init_tests.launcher()
 	error += get_tests.launcher()
 	if error == 0:
 		print("\nCongratulations! All tests passed.")
 	else:
 		sys.exit(1)
 
-# means only run main() if the scripted is executed directly as opposed to imported as a module
+# means only run main() if the script is executed directly as opposed to imported as a module
 if __name__=="__main__":
 	main()

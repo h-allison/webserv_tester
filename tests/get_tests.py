@@ -8,6 +8,8 @@ import sys
 import defines
 import color
 
+test_count = 0
+
 """
 Resources:
 https://www.datacamp.com/tutorial/python-subprocess
@@ -37,7 +39,9 @@ def start_server(config_path):
 	return server_proc
 
 def get_test_1(server):
-	request_msg = "GET /example/index.html\r\n\r\n"
+	global test_count
+	test_count += 1
+	request_msg = "GET /index.html HTTP/1.0\r\n\r\n"
 	
 	printf_proc = subprocess.Popen(
 		["printf", request_msg],
@@ -55,18 +59,19 @@ def get_test_1(server):
 	output, _ = nc_proc.communicate()
 	# communicate returns 2 values, but we've already merged stderr into stdout,
 	#  the _ means 2nd value is ignored
-	print(output)
-	return 0
+
+	ok = output.startswith("HTTP/1.0 200 OK")
+	color.print_test(f"Test {test_count}", f"GET /index.html",
+					"should return 200 OK", ok)
+	return 0 if ok else 1
 
 
 def launcher():
-	color.title_print("simple GET tests", "bold")
-	server_proc = start_server(defines.configs + "simple_0.txt")
-	
-	error = 0
-	error += get_test_1(server_proc)
-	#error += get_test_2(server_proc)
-	server_proc.kill()
-
-	return error
+    color.title_print("simple GET tests", "bold")
+    server_proc = start_server(defines.configs + "simple_example_allows_get.conf")
+    error = 0
+    error += get_test_1(server_proc)
+    #error += get_test_2(server_proc)
+    server_proc.kill()
+    return error
 

@@ -23,9 +23,9 @@ def get_test_simple_0():
 	server_proc = subprocess.run([defines.webserv, config_path], capture_output=True, text=True)
 """
 
-def start_server(config_path):
-	
-	print("./webserv ", config_path)
+def start_server(config_name):
+	config_path = defines.configs + config_name
+	print("./webserv ", config_name, "\n")
 	server_proc = subprocess.Popen(
 		[defines.webserv, config_path],
 		stdout=subprocess.PIPE,
@@ -38,7 +38,7 @@ def start_server(config_path):
 		sys.exit(1)
 	return server_proc
 
-def get_test_index(server):
+def test_get_index(server):
 	global test_count
 	test_count += 1
 	request_msg = "GET /index.html HTTP/1.0\r\n\r\n"
@@ -63,10 +63,10 @@ def get_test_index(server):
 	ok = output.startswith("HTTP/1.0 200 OK")
 	msg_string = "\"" + request_msg.replace("\r\n", "\\r\\n") + "\""
 	color.print_test(f"Test {test_count}", msg_string,
-					"should return 200 OK", ok)
+					"200 OK", ok)
 	return 0 if ok else 1
 
-def get_test_root_without_autoindex(server):
+def test_get_root_without_autoindex(server):
 	global test_count
 	test_count += 1
 	request_msg = "GET / HTTP/1.0\r\n\r\n"
@@ -91,15 +91,15 @@ def get_test_root_without_autoindex(server):
 	ok = output.startswith("HTTP/1.0 403 Forbidden")
 	msg_string = "\"" + request_msg.replace("\r\n", "\\r\\n") + "\""
 	color.print_test(f"Test {test_count}",
-					msg_string, "should return 403 Forbidden", ok)
+					msg_string, "403 Forbidden", ok)
 	return 0 if ok else 1
 
 def launcher():
     color.title_print("simple GET tests", "bold")
-    server_proc = start_server(defines.configs + "simple_example_allows_get.conf")
+    server_proc = start_server("simple_allow_get_autoindex_off.conf")
     error = 0
-    error += get_test_index(server_proc)
-    error += get_test_root_without_autoindex(server_proc)
+    error += test_get_index(server_proc)
+    error += test_get_root_without_autoindex(server_proc)
     server_proc.kill()
     return error
 

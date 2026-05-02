@@ -29,13 +29,13 @@ def cprint(string, color, end="\n"):
 def title_print(string, color):
 	msg = ("\n---------------- " +
 			string +
-			" ---------------\n")
+			" ------------------------------\n")
 	cprint(msg, color)
 
-def print_test(title, request, response, ok):
+def print_test(title, request, expected, ok):
     cprint(title, "bold", end="\t")
-    print(request, end=" ... ")
+    print(request, "... Expected =", expected, end=" ... ")
     if ok:
         cprint("OK", "green")
     else:
-        cprint("FAIL - " + response, "red")
+        cprint("FAIL","red")

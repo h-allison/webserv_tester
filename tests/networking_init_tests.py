@@ -15,9 +15,10 @@ Resources:
 https://stackoverflow.com/questions/43274476/is-there-a-way-to-check-if-a-subprocess-is-still-running
 """
 
-def networking_test_bad_config(config_path):
+def test_get_networking_bad_config(config_name):
 	global test_count
 	test_count += 1
+	config_path = defines.configs_networking_init + config_name
 	if config_path.endswith("bad_port_requires_root.conf"):
 		if os.getuid() == 0:
 			color.cprint("Test " + str(test_count) +
@@ -33,14 +34,14 @@ def networking_test_bad_config(config_path):
 	ok = is_finished is not None
 	if not ok:
 		proc.kill()
-	color.print_test(f"Test {test_count}", f"./webserv {config_path}", "should exit", ok)
+	color.print_test(f"Test {test_count}", f"./webserv {config_name}", "exit(1)", ok)
 	return 0 if ok else 1
 
 def launcher():
 	color.title_print("networking init tests", "bold")
 	error = 0
-	error += networking_test_bad_config(defines.configs_networking_init + "no_listen.conf")
-	error += networking_test_bad_config(defines.configs_networking_init + "bad_port_requires_root.conf")
-	error += networking_test_bad_config(defines.configs_networking_init + "bad_port_too_big.conf")
+	error += test_get_networking_bad_config("no_listen.conf")
+	error += test_get_networking_bad_config("bad_port_requires_root.conf")
+	error += test_get_networking_bad_config("bad_port_too_big.conf")
 	return error
 

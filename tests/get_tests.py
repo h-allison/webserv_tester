@@ -94,6 +94,14 @@ def test_get_image_png(server):
 	color.print_test(f"Test {test_count}", format_request(request_msg), "200 OK + image/png", ok)
 	return 0 if ok else 1
 
+def test_get_image_gif(server):
+	global test_count
+	test_count += 1
+	request_msg = "GET /minishell.gif HTTP/1.0\r\n\r\n"
+	output = send_request(request_msg)
+	ok = output.startswith("HTTP/1.0 200 OK") and "Content-Type: image/gif" in output
+	color.print_test(f"Test {test_count}", format_request(request_msg), "200 OK + image/gif", ok)
+	return 0 if ok else 1
 
 def test_get_root_without_autoindex(server):
 	global test_count
@@ -125,6 +133,7 @@ def launcher():
 	tests = [
 		test_get_index,
 		test_get_image_png,
+		test_get_image_gif,
 		test_get_root_without_autoindex,
 		test_nonexistent_file,
 	]

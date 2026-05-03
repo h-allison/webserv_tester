@@ -45,7 +45,7 @@ def restart_if_needed(server_proc, config_name):
 		server_proc = start_server(config_name)
 	return server_proc
 
-def send_request(request_msg):
+def send_request_get_header(request_msg):
 	printf_proc = subprocess.Popen(
 		["printf", request_msg],
 		stdout=subprocess.PIPE,
@@ -77,9 +77,9 @@ def test_get_index(server):
 	global test_count
 	test_count += 1
 	request_msg = "GET /index.html HTTP/1.0\r\n\r\n"
-	output = send_request(request_msg)
+	header = send_request_get_header(request_msg)
 
-	ok = output.startswith("HTTP/1.0 200 OK") and "Content-Type: text/html" in output
+	ok = header.startswith("HTTP/1.0 200 OK") and "Content-Type: text/html" in header
 	msg_string = format_request(request_msg)
 	color.print_test(f"Test {test_count}", msg_string,
 					"200 OK + text/html", ok)
@@ -89,8 +89,8 @@ def test_get_image_png(server):
 	global test_count
 	test_count += 1
 	request_msg = "GET /minirt.png HTTP/1.0\r\n\r\n"
-	output = send_request(request_msg)
-	ok = output.startswith("HTTP/1.0 200 OK") and "Content-Type: image/png" in output
+	header = send_request_get_header(request_msg)
+	ok = header.startswith("HTTP/1.0 200 OK") and "Content-Type: image/png" in header
 	color.print_test(f"Test {test_count}", format_request(request_msg), "200 OK + image/png", ok)
 	return 0 if ok else 1
 
@@ -98,28 +98,78 @@ def test_get_image_gif(server):
 	global test_count
 	test_count += 1
 	request_msg = "GET /minishell.gif HTTP/1.0\r\n\r\n"
-	output = send_request(request_msg)
-	ok = output.startswith("HTTP/1.0 200 OK") and "Content-Type: image/gif" in output
+	header = send_request_get_header(request_msg)
+	ok = header.startswith("HTTP/1.0 200 OK") and "Content-Type: image/gif" in header
 	color.print_test(f"Test {test_count}", format_request(request_msg), "200 OK + image/gif", ok)
+	return 0 if ok else 1
+
+def test_get_image_jpg(server):
+	global test_count
+	test_count += 1
+	request_msg = "GET /disarray_0.jpg HTTP/1.0\r\n\r\n"
+	header = send_request_get_header(request_msg)
+	ok = header.startswith("HTTP/1.0 200 OK") and "Content-Type: image/jpeg" in header
+	# nginx treats jpg and jpeg as the same type, and returns image/jpeg for both
+	color.print_test(f"Test {test_count}", format_request(request_msg), "200 OK + image/jpeg", ok)
+	return 0 if ok else 1
+
+def test_get_image_jpeg(server):
+	global test_count
+	test_count += 1
+	request_msg = "GET /disarray_1.jpeg HTTP/1.0\r\n\r\n"
+	header = send_request_get_header(request_msg)
+	ok = header.startswith("HTTP/1.0 200 OK") and "Content-Type: image/jpeg" in header
+	color.print_test(f"Test {test_count}", format_request(request_msg), "200 OK + image/jpeg", ok)
+	return 0 if ok else 1
+
+def test_get_unknown_extension(server):
+	global test_count
+	test_count += 1
+	request_msg = "GET /some_file.unknown HTTP/1.0\r\n\r\n"
+	header = send_request_get_header(request_msg)
+	if "Content-Type: application/octet-stream" in header:
+		our_type = "application/octet-stream"
+	elif "Content-Type: text/plain" in header:
+		our_type = "text/plain"
+	else:
+		our_type = "neither"
+	ok = header.startswith("HTTP/1.0 200 OK") and ("Content-Type: application/octet-stream" in header or "Content-Type: text/plain" in header)
+	color.print_test(f"Test {test_count}", format_request(request_msg), "200 OK + application/octet-stream or text/plain", ok)
+	color.cprint("\n\tNote: nginx returns text/plain for unknown extensions, but RFC 2046 (Section 5.2.4.)\n\tsays application/octet-stream is the default for unknown types.", "gray")
+	color.cprint(f"\tWebserv responded with: {our_type}\n", "gray")
 	return 0 if ok else 1
 
 def test_get_root_without_autoindex(server):
 	global test_count
 	test_count += 1
 	request_msg = "GET / HTTP/1.0\r\n\r\n"
-	output = send_request(request_msg)
-	ok = output.startswith("HTTP/1.0 403 Forbidden")
+	header = send_request_get_header(request_msg)
+	ok = header.startswith("HTTP/1.0 403 Forbidden")
 	msg_string = format_request(request_msg)
 	color.print_test(f"Test {test_count}",
 					msg_string, "403 Forbidden", ok)
+	return 0 if ok else 1
+
+def test_get_missing_http_version(server):
+	global test_count
+	test_count += 1
+	request_msg = "GET /hello_world.txt\r\n\r\n"
+	header = send_request_get_header(request_msg)
+	ok = header.startswith("HTTP/1.0 400 Bad Request")
+	msg_string = format_request(request_msg)
+	ok = header.startswith("HTTP/1.0 400 Bad Request") and ("Content-Type: text/html" in header)
+	color.print_test(f"Test {test_count}", format_request(request_msg), "400 Bad Request + text/html (default error page)", ok)
+	color.cprint("\n\tNote: nginx treats requests with missing http version as HTTP 0.9, and returns the requested file with no headers.\n", "gray")
+	
+	color.cprint(f"\tWebserv responded with: {our_type}\n", "gray")
 	return 0 if ok else 1
 
 def test_nonexistent_file(server):
 	global test_count
 	test_count += 1
 	request_msg = "GET /nonexistent.html HTTP/1.0\r\n\r\n"
-	output = send_request(request_msg)
-	ok = output.startswith("HTTP/1.0 404 Not Found")
+	header = send_request_get_header(request_msg)
+	ok = header.startswith("HTTP/1.0 404 Not Found")
 	msg_string = format_request(request_msg)
 	color.print_test(f"Test {test_count}",
 					msg_string, "404 Not Found", ok)
@@ -131,11 +181,15 @@ def launcher():
 	error = 0
 
 	tests = [
-		test_get_index,
-		test_get_image_png,
-		test_get_image_gif,
-		test_get_root_without_autoindex,
-		test_nonexistent_file,
+		test_get_index, # 200 OK
+		test_get_image_png, # 200 OK
+		test_get_image_gif, # 200 OK
+		test_get_image_jpg, # 200 OK
+		test_get_image_jpeg, # 200 OK
+		test_get_unknown_extension, # 200 OK + application/octet-stream or text/plain
+	#	test_missing_http_version, #400 Bad Request
+		test_get_root_without_autoindex, # 403 Forbidden
+		test_nonexistent_file, # 404 Not Found
 	]
 
 	for test in tests:

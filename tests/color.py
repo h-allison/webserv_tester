@@ -15,6 +15,8 @@ def get_ansi(color):
 	if color == "bold_cyan":
 		return "\033[96;1m{}\033[00m"
 	
+	if color == "gray":
+		return "\033[90m{}\033[00m"
 	if color == "red":
 		return "\033[91m{}\033[00m"
 	if color == "green":

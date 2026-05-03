@@ -105,15 +105,16 @@ def launcher():
 	color.title_print("simple GET tests", "bold")
 	server_proc = start_server("simple_allow_get_autoindex_off.conf")
 	error = 0
-	
-	error += test_get_index(server_proc)
-	server_proc = restart_if_needed(server_proc, "simple_allow_get_autoindex_off.conf")
 
-	error += test_get_root_without_autoindex(server_proc)
-	server_proc = restart_if_needed(server_proc, "simple_allow_get_autoindex_off.conf")
-	
-	error += test_nonexistent_file(server_proc)
-	server_proc = restart_if_needed(server_proc, "simple_allow_get_autoindex_off.conf")	
+	tests = [
+		test_get_index,
+		test_get_root_without_autoindex,
+		test_nonexistent_file
+	]
+
+	for test in tests:
+		error += test(server_proc)
+		server_proc = restart_if_needed(server_proc, "simple_allow_get_autoindex_off.conf")	
 	
 	server_proc.kill()
 	return error

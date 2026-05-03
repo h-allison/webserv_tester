@@ -55,14 +55,20 @@ def send_request(request_msg):
 		["nc", "localhost", defines.port],
 		stdin=printf_proc.stdout,
 		stdout=subprocess.PIPE,
-		stderr=subprocess.STDOUT,
-		text=True)
+		stderr=subprocess.STDOUT)
 	
 	printf_proc.stdout.close() # need to close this because netcat has it open
 	output, _ = nc_proc.communicate()
 	# communicate returns 2 values, but we've already merged stderr into stdout,
 	#  the _ means 2nd value is ignored
-	return output
+	
+	header = output.split(b"\r\n\r\n")[0].decode("utf-8")
+	# previously utf-8 encoding was done by text=True in subprocess.Popen,
+	# but commnuicate() will then not work when it's reading binary data from a file
+	# that's not meant to be text, like a png file. So we're reading in binary
+	# and converting just the header to text
+
+	return header
 
 def format_request(request_msg):
 	return "\"" + request_msg.replace("\r\n", "\\r\\n") + "\""
@@ -73,11 +79,21 @@ def test_get_index(server):
 	request_msg = "GET /index.html HTTP/1.0\r\n\r\n"
 	output = send_request(request_msg)
 
-	ok = output.startswith("HTTP/1.0 200 OK")
+	ok = output.startswith("HTTP/1.0 200 OK") and "Content-Type: text/html" in output
 	msg_string = format_request(request_msg)
 	color.print_test(f"Test {test_count}", msg_string,
-					"200 OK", ok)
+					"200 OK + text/html", ok)
 	return 0 if ok else 1
+
+def test_get_image_png(server):
+	global test_count
+	test_count += 1
+	request_msg = "GET /minirt.png HTTP/1.0\r\n\r\n"
+	output = send_request(request_msg)
+	ok = output.startswith("HTTP/1.0 200 OK") and "Content-Type: image/png" in output
+	color.print_test(f"Test {test_count}", format_request(request_msg), "200 OK + image/png", ok)
+	return 0 if ok else 1
+
 
 def test_get_root_without_autoindex(server):
 	global test_count
@@ -108,8 +124,9 @@ def launcher():
 
 	tests = [
 		test_get_index,
+		test_get_image_png,
 		test_get_root_without_autoindex,
-		test_nonexistent_file
+		test_nonexistent_file,
 	]
 
 	for test in tests:

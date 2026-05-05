@@ -1,5 +1,9 @@
 #! /usr/bin/python3
 import os
+from pathlib import Path
+
+script_path = Path(__file__)
+script_dir = script_path.parent
 
 cwd = os.getcwd()
 webserv = cwd.removesuffix("/webserv_tester/tests") + "/webserv"

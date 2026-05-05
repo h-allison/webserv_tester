@@ -10,7 +10,8 @@ import networking_init_tests
 import get_tests
 
 def print_logo():
-	file = open(".logo.txt")
+	logo_path = os.path.join(defines.script_dir, '.logo.txt')
+	file = open(logo_path)
 	content = file.read()
 	print(content)
 	file.close()

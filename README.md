@@ -10,17 +10,12 @@ Clone the webserv_tester repository into the root directory of your webserv proj
 cd webserv
 git clone git@github.com:h-allison/webserv_tester.git
 ```
-└── webserv/  
-      ├── webserv <-- executable  
-      ├── <your webserv project files>  
-      └── webserv_tester/ <-- tester repository 
-
-![
-└── webserv/
+```
+.
+└── /webserv <-- project directory/
     ├── webserv <-- executable
-    ├── <your webserv project files>
-    └── webserv_tester/ <-- tester repository
-](.readme_files/file_structure.png)
+    └── /webserv_tester <-- tester repository
+```
 
 You will probably want to add the webserv_tester repository to your webserv's .gitignore.
 

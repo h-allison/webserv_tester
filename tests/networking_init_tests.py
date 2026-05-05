@@ -41,6 +41,7 @@ def launcher():
 	color.title_print("networking init tests", "bold")
 	error = 0
 	error += test_get_networking_bad_config("no_listen.conf")
+	error += test_get_networking_bad_config("listen_duplication.conf")
 	error += test_get_networking_bad_config("bad_port_requires_root.conf")
 	error += test_get_networking_bad_config("bad_port_too_big.conf")
 	return error

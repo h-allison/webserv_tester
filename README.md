@@ -15,7 +15,7 @@ git clone git@github.com:h-allison/webserv_tester.git
     ├── webserv <-- executable
     ├── <your webserv project files>
     └── webserv_tester/ <-- tester repository <br>
-](readme_files/file_structure.png)
+](.readme_files/file_structure.png)
 
 You will probably want to add the webserv_tester repository to your webserv's .gitignore.
 

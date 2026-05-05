@@ -11,10 +11,11 @@ cd webserv
 git clone git@github.com:h-allison/webserv_tester.git
 ```
 
-└── webserv/  \
-    ├── webserv <-- executable \ 
-    ├── <your webserv project files>/  \ 
-    └── webserv_tester/ <-- tester repository
+
+└── webserv/ <br>
+    ├── webserv <-- executable <br>
+    ├── <your webserv project files>/  <br> 
+    └── webserv_tester/ <-- tester repository <br>
 
 
 You will probably want to add the webserv_tester repository to your webserv's .gitignore.

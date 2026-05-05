@@ -1,2 +1,5 @@
-# webserv_unit_tests
-unit tests for webserv
+# webserv_tester
+
+## How to run:
+
+./tests/main.py

@@ -1,5 +1,0 @@
-server{
-  listen 127.0.0.1:8080;
-  root /home/hallison/webserv/unit-tests/www/simple_dot_com/;
-  autoindex off;
-}

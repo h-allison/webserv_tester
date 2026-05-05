@@ -11,9 +11,9 @@ cd webserv
 git clone git@github.com:h-allison/webserv_tester.git
 ```
 
-└── webserv/  
-    ├── webserv <-- executable  
-    ├── <your webserv project files>/  
+└── webserv/  \
+    ├── webserv <-- executable \ 
+    ├── <your webserv project files>/  \ 
     └── webserv_tester/ <-- tester repository
 
 

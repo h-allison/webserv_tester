@@ -70,6 +70,28 @@ def send_request_get_header(request_msg):
 
 	return header
 
+"""
+NOTE: send_request_get_response() returns the entire response, with NO ENCODING
+	This is needed for testing binary files, or responses to HTTP 0.9  requests,
+	but for most tests, send_request_get_header() should be used.
+"""
+def send_request_get_response(request_msg):
+	printf_proc = subprocess.Popen(
+		["printf", request_msg],
+		stdout=subprocess.PIPE,
+		text=True)
+	
+	nc_proc = subprocess.Popen(
+		["nc", "localhost", defines.port],
+		stdin=printf_proc.stdout,
+		stdout=subprocess.PIPE,
+		stderr=subprocess.STDOUT)
+	
+	printf_proc.stdout.close() # need to close this because netcat has it open
+	output, _ = nc_proc.communicate()
+	return output
+
+
 def format_request(request_msg):
 	return "\"" + request_msg.replace("\r\n", "\\r\\n") + "\""
 
@@ -154,14 +176,10 @@ def test_get_missing_http_version(server):
 	global test_count
 	test_count += 1
 	request_msg = "GET /hello_world.txt\r\n\r\n"
-	header = send_request_get_header(request_msg)
-	ok = header.startswith("HTTP/1.0 400 Bad Request")
+	response = send_request_get_response(request_msg)
+	ok = response.startswith(b"hello world")
 	msg_string = format_request(request_msg)
-	ok = header.startswith("HTTP/1.0 400 Bad Request") and ("Content-Type: text/html" in header)
-	color.print_test(f"Test {test_count}", format_request(request_msg), "400 Bad Request + text/html (default error page)", ok)
-	color.cprint("\n\tNote: nginx treats requests with missing http version as HTTP 0.9, and returns the requested file with no headers.\n", "gray")
-	
-	color.cprint(f"\tWebserv responded with: {our_type}\n", "gray")
+	color.print_test(f"Test {test_count}", format_request(request_msg), "requested file with no headers (HTTP 0.9)", ok)
 	return 0 if ok else 1
 
 def test_nonexistent_file(server):
@@ -187,7 +205,7 @@ def launcher():
 		test_get_image_jpg, # 200 OK
 		test_get_image_jpeg, # 200 OK
 		test_get_unknown_extension, # 200 OK + application/octet-stream or text/plain
-	#	test_missing_http_version, #400 Bad Request
+		test_get_missing_http_version, # treats as HTTP 0.9
 		test_get_root_without_autoindex, # 403 Forbidden
 		test_nonexistent_file, # 404 Not Found
 	]

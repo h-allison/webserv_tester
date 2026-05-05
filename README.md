@@ -10,7 +10,7 @@ Clone the webserv_tester repository into the root directory of your webserv proj
 cd webserv
 git clone git@github.com:h-allison/webserv_tester.git
 ```
-└── webserv/
+└── webserv/  
       ├── webserv <-- executable  
       ├── <your webserv project files>  
       └── webserv_tester/ <-- tester repository 

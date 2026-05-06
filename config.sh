@@ -13,9 +13,9 @@ sed -i "s|DIRECTORY/|$PWD/|g" test_configs/networking_init/*.conf
 
 echo -e "Done.\n"
 
-echo -e "To run the webserv tester from anywhere, add this alias to your .zshrc\n"
+echo -e "To run the webserv tester from anywhere, add this alias to your .zshrc or .bashrc\n"
 
-echo -e "alias testserv="$PWD+"/src/main.py"
+echo -e "alias testserv=$PWD/tests/main.py"
 
-echo -e "\nAlternately, you can run the tester from\n.$PWD/src/main.py\n"
+echo -e "\nAlternately, you can run the tester from\n.$PWD/tests/main.py\n"
 

@@ -15,7 +15,7 @@ echo -e "Done.\n"
 
 echo -e "To run the webserv tester from anywhere, add this alias to your .zshrc\n"
 
-echo -e "alias testerv="$PWD+"/src/main.py"
+echo -e "alias testserv="$PWD+"/src/main.py"
 
 echo -e "\nAlternately, you can run the tester from\n.$PWD/src/main.py\n"
 

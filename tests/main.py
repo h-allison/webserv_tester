@@ -5,9 +5,11 @@ import sys
 # my files
 import defines
 import color
-import parsing_tests
-import networking_init_tests
-import get_tests
+import test_parsing
+import test_networking_init
+import test_get
+import test_index_generation
+import test_autoindex
 
 def print_logo():
 	logo_path = os.path.join(defines.script_dir, '.logo.txt')
@@ -28,9 +30,11 @@ def main():
 	print_logo()
 	if file_exists() == False:
 		sys.exit(1)
-	error += parsing_tests.launcher()
-	error += networking_init_tests.launcher()
-	error += get_tests.launcher()
+	error += test_parsing.launcher()
+	error += test_networking_init.launcher()
+	error += test_get.launcher()
+	error += test_autoindex.launcher()
+	error += test_index_generation.launcher()
 	if error == 0:
 		print("\nCongratulations! All tests passed.")
 	else:

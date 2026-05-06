@@ -171,7 +171,7 @@ def test_nonexistent_file(server):
 	return 0 if ok else 1
 """
 
-def test_get_index(server):
+def test_generate_index(server):
 	global test_count
 	test_count += 1
 	request_msg = "GET / HTTP/1.0\r\n\r\n"
@@ -185,12 +185,12 @@ def test_get_index(server):
 
 
 def launcher():
-	color.title_print("autoindex tests", "bold")
+	color.title_print("auto-generation of index.html tests", "bold")
 	error = 0
 	
-	server_proc = start_server("simple_allow_get_autoindex_on.conf")
+	server_proc = start_server("autoindex_on_but_no_index.conf")
 	tests = [
-		test_get_index, # 200 OK
+		test_generate_index, # 200 OK
 		# test_get_image_png, # 200 OK
 		# test_get_image_gif, # 200 OK
 		# test_get_image_jpg, # 200 OK
@@ -202,7 +202,7 @@ def launcher():
 	]
 	for test in tests:
 		error += test(server_proc)
-		server_proc = restart_if_needed(server_proc, "simple_allow_get_autoindex_on.conf")	
+		server_proc = restart_if_needed(server_proc, "autoindex_on_but_no_index.conf")	
 	
 	server_proc.kill()
 	return error

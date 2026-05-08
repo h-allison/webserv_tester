@@ -175,12 +175,15 @@ def test_generate_index(server):
 	global test_count
 	test_count += 1
 	request_msg = "GET / HTTP/1.0\r\n\r\n"
-	header = send_request_get_header(request_msg)
+	response = send_request_get_response(request_msg)
 
-	ok = header.startswith("HTTP/1.0 200 OK") and "Content-Type: text/html" in header
+	header = response.split(b"\r\n\r\n")[0].decode("utf-8")
+	body = response.split(b"\r\n\r\n")[1].decode("utf-8")
+	ok = header.startswith("HTTP/1.0 200 OK") and "Content-Type: text/html" in header \
+			and "A.html" in body and "B.txt" in body and "C.jpg" in body
 	msg_string = format_request(request_msg)
 	color.print_test(f"Test {test_count}", msg_string,
-					"200 OK + text/html", ok)
+					"200 OK + text/html + file list", ok)
 	return 0 if ok else 1
 
 

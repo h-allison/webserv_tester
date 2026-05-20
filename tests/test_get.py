@@ -3,6 +3,7 @@ import os
 import subprocess
 import time
 import sys
+import datetime
 
 # my files
 import defines
@@ -26,24 +27,28 @@ def get_test_simple_0():
 def start_server(config_name):
 	config_path = defines.configs + config_name
 	print("./webserv ", config_name, "\n")
+	os.makedirs(defines.logs, exist_ok=True) # create logs dir if doesn't exist
+	log_file_name = defines.logs + "/webserv_" + datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S") + ".log"
+	log_file = open(log_file_name, "w")
 	server_proc = subprocess.Popen(
 		[defines.webserv, config_path],
-		stdout=subprocess.PIPE,
-		stderr=subprocess.STDOUT)
-	time.sleep(0.3) # 200 milliseconds gives webserv time to start
+		stdout=log_file,
+		stderr=log_file)
+	time.sleep(0.2) # 200 milliseconds gives webserv time to start
 	if server_proc.poll() is not None:
-		output = server_proc.stdout.read().decode()
+		log_file.close()
 		print("\nwebserv failed to start with config " + config_path)
-		print(output)
+		print("Check the log file for details: " + log_file_name)
 		sys.exit(1)
-	return server_proc
+	return server_proc, log_file
 
-def restart_if_needed(server_proc, config_name):
-	time.sleep(0.2)
+def restart_if_needed(server_proc, config_name, log_file):
+	time.sleep(0.5)
 	if server_proc.poll() is not None:
 		color.cprint("\nwebserv exited unexpectedly. restarting to continue tests...", "cyan")
-		server_proc = start_server(config_name)
-	return server_proc
+		log_file.close()
+		server_proc, log_file = start_server(config_name)
+	return server_proc, log_file
 
 def send_request_get_header(request_msg):
 	printf_proc = subprocess.Popen(
@@ -61,6 +66,8 @@ def send_request_get_header(request_msg):
 	output, _ = nc_proc.communicate()
 	# communicate returns 2 values, but we've already merged stderr into stdout,
 	#  the _ means 2nd value is ignored
+	nc_proc.wait()
+	printf_proc.wait()
 	
 	header = output.split(b"\r\n\r\n")[0].decode("utf-8")
 	# previously utf-8 encoding was done by text=True in subprocess.Popen,
@@ -195,7 +202,7 @@ def test_nonexistent_file(server):
 
 def launcher():
 	color.title_print("simple GET tests", "bold")
-	server_proc = start_server("simple_allow_get_autoindex_off.conf")
+	server_proc, log_file = start_server("simple_allow_get_autoindex_off.conf")
 	error = 0
 
 	tests = [
@@ -212,8 +219,9 @@ def launcher():
 
 	for test in tests:
 		error += test(server_proc)
-		server_proc = restart_if_needed(server_proc, "simple_allow_get_autoindex_off.conf")	
+		server_proc, log_file = restart_if_needed(server_proc, "simple_allow_get_autoindex_off.conf", log_file)	
 	
+	log_file.close()
 	server_proc.kill()
 	return error
 

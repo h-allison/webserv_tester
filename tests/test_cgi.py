@@ -214,32 +214,46 @@ def test_get_not_allowed(server):
 	color.cprint("\t405 Method Not Allowed is arguably the most accurate response,\n\tthough it was not introduced until HTTP 1.1", "gray")
 	return 0 if ok else 1	
 
+def test_get_py_script(server):
+	global test_count
+	test_count += 1
+	request_msg = "GET /scripts/hello_world.py HTTP/1.0\r\n\r\n"
+	response = send_request_get_response(request_msg)
+	ok = response.startswith(b"hello world")
+	msg_string = format_request(request_msg)
+	color.print_test(f"Test {test_count}",
+					msg_string, "hello world", ok)
+	return 0 if ok else 1	
+
 def launcher():
-	color.title_print("simple GET tests", "bold")
-	server_proc, log_file = start_server("simple_allow_get_autoindex_off.conf")
+	color.title_print("simple CGI GET tests", "bold")
+	server_proc, log_file = start_server("simple_CGI.conf")
 	error = 0
 
 	tests = [
-		test_get_index, # 200 OK
-		test_get_image_png, # 200 OK
-		test_get_image_gif, # 200 OK
-		test_get_image_jpg, # 200 OK
-		test_get_image_jpeg, # 200 OK
-		test_get_unknown_extension, # 200 OK + application/octet-stream or text/plain
-		test_get_missing_http_version, # treats as HTTP 0.9
-		test_get_root_without_autoindex, # 403 Forbidden
-		test_nonexistent_file, # 404 Not Found
+		test_get_py_script, # no code
+		#test_get_image_png, # 200 OK
+		#test_get_image_gif, # 200 OK
+		#test_get_image_jpg, # 200 OK
+		#test_get_image_jpeg, # 200 OK
+		#test_get_unknown_extension, # 200 OK + application/octet-stream or text/plain
+		#test_get_missing_http_version, # treats as HTTP 0.9
+		#test_get_root_without_autoindex, # 403 Forbidden
+		#test_nonexistent_file, # 404 Not Found
 	]
 
 	for test in tests:
 		error += test(server_proc)
-		server_proc, log_file = restart_if_needed(server_proc, "simple_allow_get_autoindex_off.conf", log_file)	
+		server_proc, log_file = restart_if_needed(server_proc, "simple_CGI.conf", log_file)	
 	log_file.close()
 	server_proc.kill()
 	
+	"""
 	server_proc, log_file = start_server("simple_allow_post_autoindex_off.conf")
 	error += test_get_not_allowed(server_proc) # 403 Forbidden
 	log_file.close()
 	server_proc.kill()
+	"""
+	
 	return error
 

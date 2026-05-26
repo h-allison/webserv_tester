@@ -10,6 +10,7 @@ import test_networking_init
 import test_get
 import test_index_generation
 import test_autoindex
+import test_cgi
 
 def print_logo():
 	logo_path = os.path.join(defines.script_dir, '.logo.txt')
@@ -35,6 +36,7 @@ def main():
 	error += test_get.launcher()
 	error += test_autoindex.launcher()
 	error += test_index_generation.launcher()
+	error += test_cgi.launcher()
 	if error == 0:
 		print("\nCongratulations! All tests passed.")
 	else:

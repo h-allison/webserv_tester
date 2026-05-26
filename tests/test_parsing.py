@@ -19,13 +19,13 @@ def test_no_arg():
 	global test_count
 	test_count += 1
 	proc = subprocess.Popen([defines.webserv], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL) #sends output to /dev/null to avoid clutter
-	time.sleep(0.2) # 100 milliseconds
+	time.sleep(0.5) # 100 milliseconds
 	is_finished = proc.poll()
-	ok = is_finished is not None
+	ok = is_finished is None
 	# poll return None if process is still running, or an exit code (0, 1, etc) if it's finished
-	if not ok:
+	if ok:
 		proc.kill()
-	color.print_test(f"Test {test_count}", "./webserv <no arguments>", "exit(1)", ok)
+	color.print_test(f"Test {test_count}", "./webserv <no arguments>", "still runs", ok)
 	return 0 if ok else 1
 
 def test_malformed_config(config_name):

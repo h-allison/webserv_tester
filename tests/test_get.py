@@ -200,6 +200,20 @@ def test_nonexistent_file(server):
 					msg_string, "404 Not Found", ok)
 	return 0 if ok else 1
 
+def test_get_not_allowed(server):
+	global test_count
+	test_count += 1
+	request_msg = "GET /index.html HTTP/1.0\r\n\r\n"
+	header = send_request_get_header(request_msg)
+	ok = header.startswith("HTTP/1.0 403 Forbidden")
+	msg_string = format_request(request_msg)
+	color.print_test(f"Test {test_count}",
+					msg_string, "403 Forbidden", ok)
+	color.cprint("\n\tNote: nginx returns 403 Forbidden for GET requests when the method is not allowed", "gray")
+	color.cprint("\tWebserv responded with: " + header.split("\n")[0], "gray")
+	color.cprint("\t405 Method Not Allowed is arguably the most accurate response,\n\tthough it was not introduced until HTTP 1.1", "gray")
+	return 0 if ok else 1	
+
 def launcher():
 	color.title_print("simple GET tests", "bold")
 	server_proc, log_file = start_server("simple_allow_get_autoindex_off.conf")
@@ -223,5 +237,11 @@ def launcher():
 	
 	log_file.close()
 	server_proc.kill()
+	
+	server_proc, log_file = start_server("simple_allow_post_autoindex_off.conf")
+	error += test_get_not_allowed(server_proc) # 403 Forbidden
+	log_file.close()
+	server_proc.kill()
+	
 	return error
 

@@ -46,6 +46,7 @@ webserv failed to start with config ...
 
 This is almost always caused by webserv still running in other process, or another server using the same port. First check that you don't have webserv running in another window. If you can't find it, there's still a good chance it might still be a runaway process, due to the tester exiting unexpectedly. Find the PID of another webserv instance with "ps aux | grep webserv" and kill it.
 
+---
 
 Common Problem #2:
 

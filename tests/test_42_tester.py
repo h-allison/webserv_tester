@@ -119,8 +119,8 @@ def test_0(server):
 	return 0 if ok else 1
 
 def launcher():
-	color.title_print("simple CGI GET tests", "bold")
-	server_proc, log_file = start_server("simple_CGI.conf")
+	color.title_print("42 tester tests", "bold")
+	server_proc, log_file = start_server("42_tester_0.conf")
 	error = 0
 
 	tests = [

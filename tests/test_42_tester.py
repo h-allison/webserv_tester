@@ -118,6 +118,40 @@ def test_0(server):
 					"200 OK + text/html", ok)
 	return 0 if ok else 1
 
+"""
+
+test_1 = "POST / ... < + other header info >"
+
+Note: In the actual 42 tester, this request is sent in several small chunks.
+If & when time allows, I will reproduce this here as well. The full message =
+
+
+POST / HTTP/1.1
+Host: localhost:3491
+User-Agent: Go-http-client/1.1
+Transfer-Encoding: chunked
+Content-Type: test/file
+Accept-Encoding: gzip
+
+
+Test manually in one chunk:
+printf "POST / HTTP/1.1\r\nHost: localhost:8080\r\nUser-Agent: Go-http-client/1.1\r\nTransfer-Encoding: chunked\r\nContent-Type: test/file\r\nAccept-Encoding: gzip\r\n\r\n" 
+| nc localhost 8080
+"""
+
+def test_1(server):
+	global test_count
+	test_count += 1
+	request_msg = "POST / HTTP/1.1\r\nHost: localhost:8080\r\nUser-Agent: Go-http-client/1.1\r\nTransfer-Encoding: chunked\r\nContent-Type: test/file\r\nAccept-Encoding: gzip\r\n\r\n"
+	header = send_request_get_header(request_msg)
+
+	ok = header.startswith("HTTP/1.0 400 Bad Request") and "Content-Type: text/html" in header
+	msg_string = format_request(request_msg)
+	color.print_test(f"Test {test_count}", msg_string,
+					"400 Bad Request + text/html", ok)
+	return 0 if ok else 1
+
+
 def launcher():
 	color.title_print("42 tester tests", "bold")
 	server_proc, log_file = start_server("42_tester_0.conf")

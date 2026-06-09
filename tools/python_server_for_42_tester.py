@@ -20,13 +20,16 @@ test_count = 0
 def expected_response():
 	global test_count
 	if test_count == 0:
-		file_path = canned_dir + "test_0"
-		with open(file_path, 'r') as file:
-			file_content = file.read()
-			return file_content
+		file_name = "test_0"
+	elif test_count == 1:
+		file_name = "test_1"
 	else:
 		return 'not handled yet'
-
+	file_path = canned_dir + file_name
+	with open(file_path, 'r') as file:
+		file_content = file.read()
+		print(file_content)
+		return file_content
 
 def handle_single_connection(c):
 	global test_count
@@ -40,13 +43,13 @@ def handle_single_connection(c):
 		print (str(data), "\n\n")
 		msg = msg + data
 		if "\r\n\r\n" in msg:
-			print("got delimiter")
 			print ("full msg = ", msg)
+			c.sendall(expected_response().encode())
+			msg = ""
 			break
-		#c.sendall(b'HTTP/1.0 200 OK\r\n\r\n')
-	c.sendall(expected_response().encode())
+	#c.sendall(expected_response().encode())
+	#c.close()
 	test_count += 1
-	c.close()
 
 def main():
 	host = "127.0.0.1"

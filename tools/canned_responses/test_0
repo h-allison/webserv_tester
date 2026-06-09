@@ -1,0 +1,12 @@
+HTTP/1.0 200 OK
+Content-Length: 355
+Content-Type: text/html
+Date: Sat, 06 Jun 2026 18:00:40 GMT
+Server: FamilyRoomWebserv
+
+<html><head><title>Index of /</title></head>
+<body><h1>Index of /</h1><hr><pre><a href="../">../</a>
+<a href="YoupiBanane/">YoupiBanane/</a>                                      06-Jun-2026 13:28                   -
+<a href="cgi_tester">cgi_tester</a>                                        06-Jun-2026 13:31             3997089
+</pre><hr></body>
+</html>

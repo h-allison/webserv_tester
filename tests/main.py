@@ -12,6 +12,7 @@ import test_index_generation
 import test_autoindex
 import test_cgi
 import test_42_tester
+import test_post
 
 def print_logo():
 	logo_path = os.path.join(defines.script_dir, '.logo.txt')
@@ -38,7 +39,7 @@ def main():
 	error += test_autoindex.launcher()
 	error += test_index_generation.launcher()
 	error += test_cgi.launcher()
-	error += test_42_tester.launcher()
+	error += test_post.launcher()
 	if error == 0:
 		print("\nCongratulations! All tests passed.")
 	else:

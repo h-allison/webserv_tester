@@ -11,7 +11,6 @@ import test_get
 import test_index_generation
 import test_autoindex
 import test_cgi
-import test_42_tester
 import test_post
 
 def print_logo():

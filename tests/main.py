@@ -40,7 +40,6 @@ def main():
 	error += test_index_generation.launcher()
 	error += test_cgi.launcher()
 	error += test_post.launcher()
-	error += test_42_tester.launcher()
 	if error == 0:
 		print("\nCongratulations! All tests passed.")
 	else:

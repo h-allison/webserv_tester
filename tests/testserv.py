@@ -9,21 +9,6 @@ import datetime
 import defines
 import color
 
-test_count = 0
-
-"""
-Resources:
-https://www.datacamp.com/tutorial/python-subprocess
-https://stackoverflow.com/questions/6809590/merging-a-python-scripts-subprocess-stdout-and-stderr-while-keeping-them-disti
-"""
-
-"""
-def get_test_simple_0():
-
-	color.cprint("Test 1", "bold")
-	server_proc = subprocess.run([defines.webserv, config_path], capture_output=True, text=True)
-"""
-
 def start_server(config_name):
 	config_path = defines.configs + config_name
 	print("./webserv ", config_name, "\n")
@@ -100,51 +85,3 @@ def send_request_get_response(request_msg):
 
 def format_request(request_msg):
 	return "\"" + request_msg.replace("\r\n", "\\r\\n") + "\""
-
-def test_get_date_py_script(server):
-	global test_count
-	test_count += 1
-	request_msg = "GET /scripts/date.py HTTP/1.0\r\n\r\n"
-	response = send_request_get_response(request_msg)
-	ok = response.startswith(b"Content-Type: text/plain\n\n20")
-	msg_string = format_request(request_msg)
-	color.print_test(f"Test {test_count}",
-					msg_string, "Content-Type: text/plain <date>", ok)
-	return 0 if ok else 1	
-
-
-def test_get_hello_world_py_script(server):
-	global test_count
-	test_count += 1
-	request_msg = "GET /scripts/hello_world.py HTTP/1.0\r\n\r\n"
-	response = send_request_get_response(request_msg)
-	ok = response.startswith(b"hello world")
-	msg_string = format_request(request_msg)
-	color.print_test(f"Test {test_count}",
-					msg_string, "hello world", ok)
-	return 0 if ok else 1	
-
-def launcher():
-	color.title_print("simple CGI GET tests", "bold")
-	server_proc, log_file = start_server("simple_CGI.conf")
-	error = 0
-
-	tests = [
-		test_get_hello_world_py_script, # no code
-	]
-
-	for test in tests:
-		error += test(server_proc)
-		server_proc, log_file = restart_if_needed(server_proc, "simple_CGI.conf", log_file)	
-	log_file.close()
-	server_proc.kill()
-	
-	"""
-	server_proc, log_file = start_server("simple_allow_post_autoindex_off.conf")
-	error += test_get_not_allowed(server_proc) # 403 Forbidden
-	log_file.close()
-	server_proc.kill()
-	"""
-	
-	return error
-

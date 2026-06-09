@@ -18,11 +18,3 @@ echo -e "To run the webserv tester from anywhere, add this alias to your .zshrc 
 echo -e "alias testserv=$PWD/tests/main.py"
 
 echo -e "\nAlternately, you can run the tester from\n.$PWD/tests/main.py\n"
-
-
-if [ ! -e "www/42_tester_root/cgi_tester" ]; then
-	echo -e "NOTE:   To pass the 42_tester section tests,
-	you need to download the cgi_tester executable from intra
-	and place it in the 42_tester_root directory like so:
-	/www/42_tester_root/cgi_tester\n"
-fi

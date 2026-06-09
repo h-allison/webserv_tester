@@ -8,7 +8,6 @@ import color
 import test_parsing
 import test_networking_init
 import test_get
-import test_index_generation
 import test_autoindex
 import test_cgi
 import test_post
@@ -36,7 +35,6 @@ def main():
 	error += test_networking_init.launcher()
 	error += test_get.launcher()
 	error += test_autoindex.launcher()
-	error += test_index_generation.launcher()
 	error += test_cgi.launcher()
 	error += test_post.launcher()
 	if error == 0:

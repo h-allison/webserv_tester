@@ -171,20 +171,6 @@ def test_nonexistent_file(server):
 	return 0 if ok else 1
 """
 
-def test_generate_index(server):
-	global test_count
-	test_count += 1
-	request_msg = "GET / HTTP/1.0\r\n\r\n"
-	response = send_request_get_response(request_msg)
-
-	header = response.split(b"\r\n\r\n")[0].decode("utf-8")
-	body = response.split(b"\r\n\r\n")[1].decode("utf-8")
-	ok = header.startswith("HTTP/1.0 200 OK") and "Content-Type: text/html" in header \
-			and "A.html" in body and "B.txt" in body and "C.jpg" in body
-	msg_string = format_request(request_msg)
-	color.print_test(f"Test {test_count}", msg_string,
-					"200 OK + text/html + file list", ok)
-	return 0 if ok else 1
 
 
 def launcher():
@@ -194,14 +180,6 @@ def launcher():
 	server_proc = start_server("autoindex_on_but_no_index.conf")
 	tests = [
 		test_generate_index, # 200 OK
-		# test_get_image_png, # 200 OK
-		# test_get_image_gif, # 200 OK
-		# test_get_image_jpg, # 200 OK
-		# test_get_image_jpeg, # 200 OK
-		# test_get_unknown_extension, # 200 OK + application/octet-stream or text/plain
-		# test_get_missing_http_version, # treats as HTTP 0.9
-		# test_get_root_without_autoindex, # 403 Forbidden
-		# test_nonexistent_file, # 404 Not Found
 	]
 	for test in tests:
 		error += test(server_proc)

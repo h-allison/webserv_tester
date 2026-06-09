@@ -125,7 +125,7 @@ def test_get_hello_world_py_script(server):
 	return 0 if ok else 1	
 
 def launcher():
-	color.title_print("simple CGI GET tests", "bold")
+	color.title_print("CGI GET tests", "bold")
 	server_proc, log_file = start_server("simple_CGI.conf")
 	error = 0
 

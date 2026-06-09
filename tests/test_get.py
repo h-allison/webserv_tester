@@ -210,8 +210,8 @@ def test_get_not_allowed(server):
 	color.print_test(f"Test {test_count}",
 					msg_string, "403 Forbidden", ok)
 	color.cprint("\n\tNote: nginx returns 403 Forbidden for GET requests when the method is not allowed", "gray")
+	color.cprint("\t405 Method Not Allowed could also be a descriptive response,\n\tbut it was not introduced until HTTP 1.1", "gray")
 	color.cprint("\tWebserv responded with: " + header.split("\n")[0], "gray")
-	color.cprint("\t405 Method Not Allowed is arguably the most accurate response,\n\tthough it was not introduced until HTTP 1.1", "gray")
 	return 0 if ok else 1	
 
 def launcher():

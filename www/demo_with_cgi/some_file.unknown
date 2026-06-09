@@ -1,0 +1,11 @@
+hellooooooo I am a weird file with an unknown extension. What should webserv do with me?!!
+
+If you try to GET me with nginx, the response is:
+
+HTTP/1.1 200 OK
+Server: nginx/1.30.0
+Date: Sun, 03 May 2026 16:09:25 GMT
+Content-Type: text/plain
+
+...
+etc.

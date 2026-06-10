@@ -6,7 +6,7 @@ POST_DIR="DIRECTORY/www/demo/upload/"
 mkdir -p "$POST_DIR"
 
 # Generate unique filename
-FILENAME="$POST_DIR/$(date +%s%N)_$$.txt"
+FILENAME="$POST_DIR$(date +%s%N)_$$.txt"
 
 # Read the payload safely if CONTENT_LENGTH is set
 if [ -n "$CONTENT_LENGTH" ] && [ "$CONTENT_LENGTH" -gt 0 ]; then

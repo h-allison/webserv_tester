@@ -1,6 +1,7 @@
 *.swp
 test_configs/*
 cgi_tester
+www/demo_with_cgi/upload/*
 www/demo/upload/*
 
 # Byte-compiled / optimized / DLL files

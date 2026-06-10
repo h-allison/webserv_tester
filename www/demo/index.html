@@ -9,6 +9,20 @@
 		padding-top: 30px;
 		padding-left: 30px;
 	}
+  body {
+    animation: backgroundChange 30s infinite;
+  }
+
+  @keyframes backgroundChange {
+    0%   { background-color: red; }
+    25%  { background-color: blue; }
+    50%  { background-color: green; }
+    75%  { background-color: orange; }
+    100% { background-color: red; }
+  }
+</style>
+
+<h1>Changing Color</h1>
 	</style>
 
 	<body><div>
@@ -43,4 +57,5 @@
     <script src="tester.js"></script>
 
 	</div></body>
+
 </html>

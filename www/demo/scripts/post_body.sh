@@ -1,12 +1,12 @@
 #!/bin/bash
 
-POST_DIR="/home/jhelbig/Desktop/clone_test/tester/www/demo/upload/"
+POST_DIR="/home/hallison/webserv/webserv_tester/www/demo/upload/"
 
 # Ensure directory exists
 mkdir -p "$POST_DIR"
 
 # Generate unique filename
-FILENAME="$POST_DIR/$(date +%s%N)_$$.txt"
+FILENAME="$POST_DIR$(date +%s%N)_$$.txt"
 
 # Read the payload safely if CONTENT_LENGTH is set
 if [ -n "$CONTENT_LENGTH" ] && [ "$CONTENT_LENGTH" -gt 0 ]; then

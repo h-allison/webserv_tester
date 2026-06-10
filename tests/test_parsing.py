@@ -19,7 +19,7 @@ def test_no_arg():
 	global test_count
 	test_count += 1
 	proc = subprocess.Popen([defines.webserv], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL) #sends output to /dev/null to avoid clutter
-	time.sleep(0.5) # 100 milliseconds
+	time.sleep(1) # 100 milliseconds
 	is_finished = proc.poll()
 	ok = is_finished is None
 	# poll return None if process is still running, or an exit code (0, 1, etc) if it's finished

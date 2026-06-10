@@ -1,46 +1,144 @@
-<!-- ####### COMMENT HERE #########-->
+<!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="UTF-8">
-		<title>Webserv</title>
-	</head>
-	<style>
-	div {
-		padding-top: 30px;
-		padding-left: 30px;
-	}
-	</style>
+<head>
+  <meta charset="UTF-8">
 
-	<body><div>
-		<h1 style="font-size: 7em; line-height: 0;">
-					Webserv</h1>
+  <title>Webserv</title>
 
-		<h2 style="padding-left: 30px; font-size: 1.5em; line-height: 0">
-					a basic HTTP server written in C++</h2>
+  <style>
+  body {
+    padding-left: 30px;
+    font-family: monospace;
+    color: #00ee00;
+    background: linear-gradient(
+      270deg,
+      #220000,
+      #3a0000,
+      #401111,
+      #432222,
+      #301111,
+      #3a0000
+    );
+    background-size: 800% 800%;
+    animation: gradientMove 10s ease infinite;
+  }
 
-		<p style="font-size: 1em; padding-left:30px">
-		@helbig @alneuman @hallison<br /><br />
-		</p>
-<hr />
-<p style="font-size: 1em;">This webpage is being hosted by our server! </p>
-</div>
-<div><a href="/minirt.png"> <img src="/minirt.png" alt="MiniRT" height="300" /> </a></div>
-<p> </p>
-<div><a href="/disarray_0.jpg"> <img src="/disarray_0.jpg" alt="MiniRT" height="300" /> </a></div>
-<p> </p>
-<div><a href="/disarray_1.jpeg"> <img src="/disarray_1.jpeg" alt="MiniRT" height="300" /> </a></div>
-<p> </p>
-<div><a href="/minishell.gif"> <img src="/minishell.gif" alt="MiniRT" height="300" /> </a></div>
+  footer {
+    font-size: 2em;
+  }
 
-<h2>CGI Test Page</h2>
-    
-    <input type="text" id="requestBody" placeholder="Type request body here...">
-    
-    <button id="submitBtn">Send Request</button>
+  @keyframes gradientMove {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
 
-    <p id="status"></p>
+  .divider {
+    border: none;
+    height: 4px;
+    background-color: #00ee00;
+  }
 
-    <script src="tester.js"></script>
+  h1 {
+    font-size: 7em;
+    line-height: 0;
+  }
+  .subtitle {
+    font-size: 2em;
+  }
+  h2 {
+    font-size: 3em;
+  }
+  .the_truth {
+    font-size: 2em;
+    animation: blinkColors 0.5s infinite;
+    animation: shiftText 1.5s infinite;
+  }
 
-	</div></body>
+  button {
+    font-size: 1.5em;
+  }
+
+  input {
+    font-size: 1.5em;
+  }
+
+  @keyframes shiftText {
+    0%, 24% {
+      text-align: left;
+      color: yellow;
+    }
+    25%, 49% {
+      text-align: center;
+      color: red;
+    }
+    50%, 74% {
+      text-align: right;
+      color: yellow;
+    }
+    75%, 100% {
+      text-align: center;
+      color: red;
+    }
+  }
+
+  </style>
+
+</head>
+
+<body>
+
+  <h1>Webserv</h1>
+
+  <p class="subtitle">a basic HTTP server written in C++</p>
+
+  <hr class="divider">
+  <p class="the_truth">This webpage is being hosted on our server!</p>
+  <hr class="divider">
+
+  <h2>Awesome Pics!!!!!</h2>
+
+  <p>
+    <div>
+      <a href="/minirt.png"><img src="/minirt.png" alt="MiniRT"
+      height="300"></a>
+    </div>
+
+    <div>
+      <a href="/disarray_0.jpg"><img src="/disarray_0.jpg" alt=
+      "Disarray 0" height="300"></a>
+    </div>
+
+    <div>
+      <a href="/disarray_1.jpeg"><img src="/disarray_1.jpeg" alt=
+      "Disarray 1" height="300"></a>
+    </div>
+
+    <div>
+      <a href="/minishell.gif"><img src="/minishell.gif" alt="Minishell"
+      height="300"></a>
+    </div>
+  </p>
+
+  <hr class="divider">
+  <p class="the_truth">This webpage is being hosted on our server!</p>
+  <hr class="divider">
+
+  <h2>CGI Test Page</h2><input type="text" id="requestBody"
+  placeholder="Type request body here..."> <button id=
+  "submitBtn">Send Request</button>
+
+  <p id="status"></p>
+
+  <script src="tester.js"></script><br>
+
+  <hr class="divider">
+
+  <br>
+
+  <footer>
+    @jhelbig @alneuman @hallison
+  </footer>
+
+</body>
 </html>

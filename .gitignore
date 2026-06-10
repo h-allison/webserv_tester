@@ -1,6 +1,7 @@
 *.swp
 test_configs/*
 cgi_tester
+www/demo/upload/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

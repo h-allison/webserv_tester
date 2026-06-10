@@ -1,6 +1,6 @@
 #!/bin/bash
 
-POST_DIR="DIRECTORY/www/demo/upload/"
+POST_DIR="/home/jhelbig/Desktop/clone_test/tester/www/demo/upload/"
 
 # Ensure directory exists
 mkdir -p "$POST_DIR"

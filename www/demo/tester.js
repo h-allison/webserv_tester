@@ -27,7 +27,7 @@ document.getElementById('submitBtn').addEventListener('click', function() {
     })
     .catch(error => {
         console.error('Error:', error);
-        statusElement.textContent = "Network error or server down.";
+        statusElement.textContent = `Server responded with status: ${response.status}`;
         statusElement.style.color = "red";
     });
 });

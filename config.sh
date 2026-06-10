@@ -14,13 +14,13 @@ sed -i "s|DIRECTORY/|$PWD/|g" test_configs/networking_init/*.conf
 #####################################################################
 
 echo -e "\nCreating scripts which require custom paths..."
-if [ -f "www/demo_with_cgi/scripts/post_body.sh" ]; then
-	rm "www/demo_with_cgi/scripts/post_body.sh"
+if [ -f "www/demo/scripts/post_body.sh" ]; then
+	rm "www/demo/scripts/post_body.sh"
 fi
 cp -r templates/script_templates/post_body.sh www/demo_with_cgi/scripts/post_body.sh
 
 echo -e "Customizing scripts with your directory path...\n"
-sed -i "s|DIRECTORY/|$PWD/|g" www/demo_with_cgi/scripts/post_body.sh
+sed -i "s|DIRECTORY/|$PWD/|g" www/demo/scripts/post_body.sh
 
 #####################################################################
 

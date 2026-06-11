@@ -49,6 +49,18 @@ def test_post_without_cgi(server):
 	color.print_test(f"Test {test_count}", msg_string,
 					"403 Forbidden + text/html", ok)
 	return 0 if ok else 1
+"""
+def test_post_with_script_that_immediately_exits(server):
+	global test_count
+	test_count += 1
+	request_msg = "POST / HTTP/1.0\r\nContent-type: text/html\r\nContent-length: 5\r\n\r\nabc\r\n"
+	header = testserv.send_request_get_header(request_msg)
+	ok = header.startswith("HTTP/1.0 403 Forbidden") and "Content-Type: text/html" in header
+	msg_string = testserv.format_request(request_msg)
+	color.print_test(f"Test {test_count}", msg_string,
+					"403 Forbidden + text/html", ok)
+	return 0 if ok else 1
+"""
 
 def launcher():
 	color.title_print("POST tests", "bold")

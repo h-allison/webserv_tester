@@ -21,8 +21,10 @@ def test_no_arg():
 	proc = subprocess.Popen([defines.webserv], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL) #sends output to /dev/null to avoid clutter
 	time.sleep(1) # 100 milliseconds
 	is_finished = proc.poll()
+	print("is finished = ", is_finished)
 	ok = is_finished is None
 	# poll return None if process is still running, or an exit code (0, 1, etc) if it's finished
+	print ("ok = ", str(ok))
 	if ok:
 		proc.kill()
 	color.print_test(f"Test {test_count}", "./webserv <no arguments>", "still runs", ok)

@@ -11,6 +11,7 @@ import test_get
 import test_autoindex
 import test_cgi
 import test_post
+import test_multiple_interfaces
 
 def print_logo():
 	logo_path = os.path.join(defines.script_dir, '.logo.txt')
@@ -34,6 +35,7 @@ def main():
 	error += test_parsing.launcher()
 	error += test_networking_init.launcher()
 	error += test_get.launcher()
+	error += test_multiple_interfaces.launcher()
 	error += test_autoindex.launcher()
 	error += test_cgi.launcher()
 	error += test_post.launcher()

@@ -62,6 +62,33 @@ def send_request_get_header(request_msg):
 
 	return header
 
+def send_request_get_header_with_port(request_msg, port):
+	printf_proc = subprocess.Popen(
+		["printf", request_msg],
+		stdout=subprocess.PIPE,
+		text=True)
+	
+	nc_proc = subprocess.Popen(
+		["nc", "localhost", str(port)],
+		stdin=printf_proc.stdout,
+		stdout=subprocess.PIPE,
+		stderr=subprocess.STDOUT)
+	
+	printf_proc.stdout.close() # need to close this because netcat has it open
+	output, _ = nc_proc.communicate()
+	# communicate returns 2 values, but we've already merged stderr into stdout,
+	#  the _ means 2nd value is ignored
+	nc_proc.wait()
+	printf_proc.wait()
+	
+	header = output.split(b"\r\n\r\n")[0].decode("utf-8")
+	# previously utf-8 encoding was done by text=True in subprocess.Popen,
+	# but commnuicate() will then not work when it's reading binary data from a file
+	# that's not meant to be text, like a png file. So we're reading in binary
+	# and converting just the header to text
+
+	return header
+
 """
 NOTE: send_request_get_response() returns the entire response, with NO ENCODING
 	This is needed for testing binary files, or responses to HTTP 0.9  requests,

@@ -4,8 +4,8 @@ import subprocess
 import time
 
 # my files
-import defines
 import color
+import defines
 
 test_count = 0
 

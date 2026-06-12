@@ -1,6 +1,6 @@
 #!/bin/bash
 
-POST_DIR="/home/hallison/webserv/webserv_tester/www/demo/upload/"
+POST_DIR="/home/hallison/42_repo_webserv/webserv_tester/www/demo/upload/"
 
 # Ensure directory exists
 mkdir -p "$POST_DIR"
